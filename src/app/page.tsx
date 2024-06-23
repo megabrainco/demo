@@ -8,8 +8,11 @@ export default function Chat() {
   return (
     <AdsProvider
       publisherToken={process.env.NEXT_PUBLIC_PUBLISHER_TOKEN}
+      adserverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
       isLoading={isLoading}
       messages={messages}
+      onAdView={({ id, code, messageId, content }) => console.log({ id, code, messageId, content })}
+      onAdClick={({ id, code, messageId, content }) => console.log({ id, code, messageId, content })}
     >
       <div>
         {messages.map(m => (
