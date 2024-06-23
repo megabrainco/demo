@@ -1,26 +1,37 @@
 'use client';
 
 import { useChat } from 'ai/react';
+import { AdsProvider, BoxAd } from '@megabrain/sdk';
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { isLoading, messages, input, handleInputChange, handleSubmit } = useChat();
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {messages.map(m => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
-        </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
-    </div>
+    <AdsProvider
+      publisherToken={process.env.NEXT_PUBLIC_PUBLISHER_TOKEN}
+      isLoading={isLoading}
+      messages={messages}
+    >
+      <div>
+        {messages.map(m => (
+          <div key={m.id}>
+            {m.role === 'user' ? 'User: ' : 'AI: '}
+            {m.content}
+            <div>
+              <BoxAd
+                code={process.env.NEXT_PUBLIC_INLINE_AD_CODE}
+                messageId={m.id}
+              />
+            </div>
+          </div>
+        ))}
+        <form onSubmit={handleSubmit}>
+          <input
+            value={input}
+            placeholder="Say something..."
+            onChange={handleInputChange}
+          />
+        </form>
+      </div>
+    </AdsProvider>
   );
 }
